@@ -22,7 +22,7 @@
   <div class="main-page">
     <h1>Planning des corvées d'épluchage</h1>
 
-    <form action="index.php" method="POST">
+    <form action="main.php" method="POST">
       <div>
         <label for="year-select">Année :</label>
         <select name="year" id="year-select">
@@ -36,15 +36,21 @@
       <table>
         <tbody>
           <?php 
-            for($i=0; $i<13; $i++){
-              echo"
-              <tr>
-                <td>";require('./selectPersonne.php');echo"</td>
-                <td>";require('./selectPersonne.php');echo"</td>
-                <td>";require('./selectPersonne.php');echo"</td>
-                <td>";require('./selectPersonne.php');echo"</td>
-              </tr>
-              ";
+            require('./all_date.php');//Contient un tableau de dates
+            $i=0;//Pour avoir 4 dates par ligne 
+            $j=0;//pour numéroter la case
+            foreach($all_date as $date){
+              $i++;
+              if($i==1) 
+                echo "<tr>";
+              
+              echo"<td>";require('./selectPersonne.php');echo"</td>";
+              
+              if($i==4){
+                 echo"</tr>"; 
+                 $i=0;
+              }
+              $j++;
             }
           ?>
         </tbody>
