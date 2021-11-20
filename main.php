@@ -1,13 +1,7 @@
 <?php 
   require('./all_date.php');
-  //echo $_POST['case1']; echo " : $all_date[1]/".$_POST['year']; 
-  //$date = ["$all_date[1]/".$_POST['year'],"$all_date[0]/".$_POST['year'] ];
   try {
-    
-    // Connexion à MongoDB
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
-    //$manager = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
-    
     $read = new MongoDB\Driver\Query([], []);
     $all_users = $manager->executeQuery('Planning.users', $read);
     
@@ -36,5 +30,4 @@
   catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();
   } 
-
 ?>

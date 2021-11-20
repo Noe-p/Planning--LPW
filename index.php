@@ -61,12 +61,18 @@
     
     <div class="statistic">
       <h1>Statistique par ordre croissant</h1>
+      <?php 
+        $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
+        $read = new MongoDB\Driver\Query([], []);
+        $all_user = $manager->executeQuery('Planning.users', $read);
+      ?>
 
       <ul>
-        <li><span>Vincent :</span> 5</li>
-        <li><span>Christophe :</span> 5</li>
-        <li><span>David :</span> 5</li>
-        <li><span>Thomas :</span> 5</li>
+        <?php 
+          foreach($all_user as $user){
+            echo "<li><span>".$user->prenom." :</span> ".count($user->taches)."</li>";
+          }
+        ?>
       </ul>
     </div>
     

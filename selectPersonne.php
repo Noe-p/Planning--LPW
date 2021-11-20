@@ -1,17 +1,10 @@
 <?php
   try {
-    
-    // Connexion à MongoDB
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
-    //$manager = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
-    // filtre
-    $filter = [];
-    $option = [];
-    $read = new MongoDB\Driver\Query($filter, $option);
+    $read = new MongoDB\Driver\Query([], []);
     $all_users = $manager->executeQuery('Planning.users', $read);
     $all_users2 = $manager->executeQuery('Planning.users', $read);
     $all_users3 = $manager->executeQuery('Planning.users', $read);
-
   } 
   catch (MongoDB\Driver\ConnectionException $e) {
     echo $e->getMessage();
