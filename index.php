@@ -17,13 +17,12 @@
     require_once('./Model/Planning.php');
     $planning = new Planning();
     
-    if(isset($_POST['year']) && !empty($_POST['year']))
-      $year = $_POST['year'];
+    if(isset($_GET['year']) && !empty($_GET['year']))
+      $year = $_GET['year'];
     else
       $year = '2018';
 
-    if(isset($_POST['case0']) && !empty($_POST['case0'])){
-      $year = $_GET['year'];
+    if(isset($_POST) && !empty($_POST)){
       $planning->setUsers($year);
     }
   ?>
@@ -36,22 +35,23 @@
 
   <div class="main-page">
     <h1>Planning des corvées d'épluchage</h1>
-
-    <form action="index.php" method="POST">
-      <label for="year-select">Année :</label>
-      <select name="year" id="year-select">
+    
+    <form class="form_year">
+      <label  for="year-select">Année :</label>
+      <select onchange="document.location.href='index.php?year='+this.value" name="year" id="year-select">
         <?php
+          $years = ['2018', '2019', '2020', '2021'];
           echo "<option value='$year'>$year</option>";
+          foreach($years as $y){
+            if($y != $year){
+              echo "<option class='option' value='$y'>$y</option>";
+            }
+          }
         ?>
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
       </select>
-      <input type="submit" class="btn" value="Valider la date"> 
     </form>
 
-    <?php echo "<form action='index.php?year=$year' method='POST'>"; ?>
+    <?php echo "<form class='form_date' action='index.php?year=$year' method='POST'>"; ?>
       <table>
         <tbody>
           <?php 
@@ -76,7 +76,6 @@
           ?>
         </tbody>
       </table>
-
       <input type="submit" class="submit-btn" value="Valider le planning"> 
     </form>
     
