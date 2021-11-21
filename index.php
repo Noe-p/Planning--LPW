@@ -13,6 +13,15 @@
 </head>
 
 <body>
+  <?php 
+    require_once('./Model/Planning.php');
+    $planning = new Planning();
+
+    if(isset($_POST) && !empty($_POST)){
+      $planning->setUsers();
+    }
+  ?>
+  
   <nav>
     <p>Viencent RODRIGUEZ<br>Noé PHILIPPE</p>
     <h2>Mini-Projet Planning</h2>
@@ -22,7 +31,7 @@
   <div class="main-page">
     <h1>Planning des corvées d'épluchage</h1>
 
-    <form action="main.php" method="POST">
+    <form action="index.php" method="POST">
       <div>
         <label for="year-select">Année :</label>
         <select name="year" id="year-select">
@@ -36,17 +45,19 @@
       <table>
         <tbody>
           <?php 
-            require('./all_date.php');//Contient un tableau de dates
-            $i=0;//Pour avoir 4 dates par ligne 
+            $i=0;
             $j=0;//pour numéroter la case
-            foreach($all_date as $date){
+            $nb_dates_ligne = 6;//Afficher le nombre de dates par lignes
+            foreach($planning->getDates() as $date){
               $i++;
               if($i==1) 
                 echo "<tr>";
               
-              echo"<td>";require('./selectPersonne.php');echo"</td>";
+              echo"<td>";
+                require('./View/selectPersonne.php');
+              echo"</td>";
               
-              if($i==4){
+              if($i==$nb_dates_ligne){
                  echo"</tr>"; 
                  $i=0;
               }
@@ -61,23 +72,16 @@
     
     <div class="statistic">
       <h1>Statistique par ordre croissant</h1>
-      <?php 
-        $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
-        $read = new MongoDB\Driver\Query([], []);
-        $all_user = $manager->executeQuery('Planning.users', $read);
-      ?>
 
       <ul>
         <?php 
-          foreach($all_user as $user){
+          foreach($planning->getUsers() as $user){
             echo "<li><span>".$user->prenom." :</span> ".count($user->taches)."</li>";
           }
         ?>
       </ul>
     </div>
-    
   </div>
-
 </body>
 
 </html>
