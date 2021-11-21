@@ -1,11 +1,12 @@
 <?php
 echo "
-<label for='personne-select'>$date/2018</label>
+<label for='personne-select'>$date/$year</label>
 <select name='case$j' id='personne-select'>";
   $user_exist = 0;
   foreach ($planning->getUsers() as $user) {
-    foreach($user->taches as $tache){//On vérifie si un user est déjà selectionné pour cette date
-      if($tache == "$date/2018"){
+    $tachesYear = 'taches'.$year;
+    foreach($user->$tachesYear as $tache){//On vérifie si un user est déjà selectionné pour cette date
+      if($tache == $date."/".$year){
         $user_exist = $user->prenom;//S'il existe on l'enregistre dans un variable
       }
     }

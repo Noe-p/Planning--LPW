@@ -5,7 +5,7 @@ class Planning{
 
   public function __construct(){
     try{
-      require_once('./Model/all_date.php');//Contient un tableau de dates
+      require_once('./Model/dates.php');//Contient un tableau de dates
       $this->dates = $all_date;
       $this->db = new MongoDB\Driver\Manager("mongodb://localhost:27017");
     }
@@ -32,14 +32,14 @@ class Planning{
   }
 
   //Mettre à jour la base de données
-  public function setUsers(){
+  public function setUsers($year){
     try {
       foreach($this->getUsers() as $user){
         $i=0;
         $user_date = [];
-        foreach($this->dates as $date){
-          if($_POST["case$i"] == $user->prenom){
-            $user_date[] = "$date/".$_POST['year'];
+        foreach($this->dates as $date){//On regarde dans chaque case s'il y a un nom
+          if($_POST["case$i"] == $user->prenom){//Si le nom corespond à l'user
+            $user_date[] = $date."/".$year;//on enregistre la date dans un tableau 
           }
         $i++;
         }
@@ -47,7 +47,7 @@ class Planning{
         $updates = new MongoDB\Driver\BulkWrite();
         $updates->update(
           ['prenom' => $user->prenom], 
-          ['$set' => ['taches' => $user_date]],
+          ['$set' => ['taches'.$year => $user_date]],
           ['multi' => true, 'upsert' => true]
         );
 
