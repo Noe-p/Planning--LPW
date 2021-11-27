@@ -6,7 +6,7 @@ body {
   flex-direction: column;
   justify-content: center;
   padding: 0;
-  margin:0;
+  margin: 0;
 }
 
 .main-page {
@@ -20,7 +20,7 @@ h1 {
 }
 
 /* NAV */
-nav{
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,7 +31,7 @@ nav{
   background-color: white;
 }
 
-nav p{
+nav p {
   margin-inline: 30px;
 }
 
@@ -41,7 +41,8 @@ nav p{
   flex-direction: column;
   align-items: center;
 }
-.form_year{
+
+.form_year {
   margin-top: 30px;
   display: flex;
   justify-content: center;
@@ -71,18 +72,40 @@ td {
   transition: all 0.3s;
 }
 
-.submit-btn:hover{
+select {
+  color: white;
+  font-size: 1em;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.Alice {
+  background-color: pink;
+}
+
+.John {
+  background-color: orange;
+}
+
+.Noé {
+  background-color: purple;
+}
+
+.Vincent {
+  background-color: teal;
+}
+
+.submit-btn:hover {
   cursor: pointer;
   width: 230px;
 }
 
 /* STATISTIC */
 
-.statistic{
+.statistic {
   margin-top: 30px;
   margin-bottom: 50px;
 }
 
-.statistic span{
+.statistic span {
   font-weight: bold;
 }
