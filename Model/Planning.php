@@ -9,6 +9,7 @@ class Planning
     try {
       require_once('./Model/dates.php'); //Contient un tableau de dates
       $this->dates = $all_date;
+      //$this->db = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
       $this->db = new MongoDB\Driver\Manager("mongodb://localhost:27017");
     } catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();

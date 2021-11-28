@@ -43,9 +43,15 @@ nav p {
 }
 
 .form_year {
+  display: flex;
+  align-items: center;
   margin-top: 30px;
   display: flex;
   justify-content: center;
+}
+
+.form_year select {
+  font-size: 1.3em;
 }
 
 table {
