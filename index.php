@@ -16,16 +16,35 @@
 
 <body>
   <?php
-  require_once('./Model/Planning.php');
-  $planning = new Planning();
+  session_start();
 
+  require_once('./Model/Connection.php');
+  require_once('./Model/Planning.php');
+  require_once('./Model/UserManager.php');
+
+  $connection = new Connection();
+  $planning = new Planning($connection->getDb());
+  $userManager = new UserManager($connection->getDb());
+
+  //Déconnexion
+  if (isset($_GET['logout']) && !empty($_GET['logout'])) {
+    $userManager->logout();
+  }
+
+  //Connexion
+  if (isset($_GET['login']) && !empty($_GET['login'])) {
+    $userManager->login($_POST['email'], $_POST['password']);
+  }
+
+  //Récupérer la Date
   if (isset($_GET['year']) && !empty($_GET['year'])) {
     $year = $_GET['year'];
   } else {
     $year = '2018';
   }
 
-  if (isset($_POST) && !empty($_POST)) {
+  //Mettre à jour le(s) utilisateur(s)
+  if (isset($_GET['setUser']) && !empty($_GET['setUser'])) {
     $planning->setUsers($year);
   }
 
@@ -34,70 +53,28 @@
   <nav>
     <p>Viencent RODRIGUEZ<br>Noé PHILIPPE</p>
     <h2>Mini-Projet Planning</h2>
-    <p>Licence Projet Web et Mobile</p>
+    <?php
+    if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+      echo "<a href='index.php?logout=1'>Déconnexion</a>";
+    } else {
+      echo "<a href='index.php?logout=0'>Connexion</a>";
+    }
+    ?>
   </nav>
 
   <div class="main-page">
-    <h1>Planning des corvées d'épluchage</h1>
-
-    <form class="form_year">
-      <label for="year-select">Année :</label>
-      <select onchange="document.location.href='index.php?year='+this.value" name="year" id="year-select">
-        <?php
-        $years = ['2018', '2019', '2020', '2021'];
-        echo "<option value='$year'>$year</option>";
-        foreach ($years as $y) {
-          if ($y != $year) {
-            echo "<option class='option' value='$y'>$y</option>";
-          }
-        }
-        ?>
-      </select>
-    </form>
-
-    <?php echo "<form class='form_date' action='index.php?year=$year' method='POST'>"; ?>
-    <table>
-      <tbody>
-        <?php
-        $i = 0;
-        $j = 0; //pour numéroter la case
-        $nb_dates_ligne = 4; //Nombre de dates par lignes
-        foreach ($planning->getDates() as $date) {
-          $i++;
-          if ($i == 1) {
-            echo "<tr>";
-          }
-          echo "<td>";
-          require('./View/selectPersonne.php');
-          echo "</td>";
-
-          if ($i == $nb_dates_ligne) {
-            echo "</tr>";
-            $i = 0;
-          }
-          $j++;
-        }
-        ?>
-      </tbody>
-    </table>
-    <input type="submit" class="submit-btn" value="Valider le planning">
-    </form>
-
-    <div class="statistic">
-      <h1>Statistique par ordre croissant</h1>
-      <ul>
-        <?php
-        foreach ($planning->getNbTaches($year) as $user) {
-          echo "<li><span>" . $user->prenom . " :</span> " . $user->count . "</li>";
-        }
-        ?>
-      </ul>
-
-
-    </div>
-
-
+    <?php
+    if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+      require_once('./View/planning.php');
+    } else {
+      require_once('./View/login.php');
+    }
+    ?>
   </div>
+
+  <footer>
+    <p>Licence professionnelle Projet Web et Mobile à Sorbonne Université 2018/2019</p>
+  </footer>
 </body>
 
 </html>

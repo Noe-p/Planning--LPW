@@ -4,16 +4,13 @@ class Planning
   private $db;
   private $dates;
 
-  public function __construct()
+  public function __construct($db)
   {
     try {
       require_once('./Model/dates.php'); //Contient un tableau de dates
-      $this->dates = $all_date;
 
-      require './vendor/autoload.php';
-      //$client = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
-      $client = new MongoDB\Client("mongodb://localhost:27017");
-      $this->db = $client->Planning->users;
+      $this->dates = $all_date;
+      $this->db = $db;
     } catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();
     }
