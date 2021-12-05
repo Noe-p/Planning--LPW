@@ -51,7 +51,7 @@
   ?>
 
   <nav>
-    <p>Viencent RODRIGUEZ<br>Noé PHILIPPE</p>
+    <p>Vincent RODRIGUEZ<br>Noé PHILIPPE</p>
     <h2>Mini-Projet Planning</h2>
     <?php
     if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
