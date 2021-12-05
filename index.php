@@ -19,14 +19,16 @@
   require_once('./Model/Planning.php');
   $planning = new Planning();
 
-  if (isset($_GET['year']) && !empty($_GET['year']))
+  if (isset($_GET['year']) && !empty($_GET['year'])) {
     $year = $_GET['year'];
-  else
+  } else {
     $year = '2018';
+  }
 
   if (isset($_POST) && !empty($_POST)) {
     $planning->setUsers($year);
   }
+
   ?>
 
   <nav>
@@ -59,12 +61,12 @@
         <?php
         $i = 0;
         $j = 0; //pour numéroter la case
-        $nb_dates_ligne = 6; //Afficher le nombre de dates par lignes
+        $nb_dates_ligne = 4; //Nombre de dates par lignes
         foreach ($planning->getDates() as $date) {
           $i++;
-          if ($i == 1)
+          if ($i == 1) {
             echo "<tr>";
-
+          }
           echo "<td>";
           require('./View/selectPersonne.php');
           echo "</td>";
@@ -83,15 +85,18 @@
 
     <div class="statistic">
       <h1>Statistique par ordre croissant</h1>
-
       <ul>
         <?php
-        foreach (array_reverse($planning->getNbTaches($year)) as $key => $user) {
-          echo "<li>$key : $user</li>";
+        foreach ($planning->getNbTaches($year) as $user) {
+          echo "<li><span>" . $user->prenom . " :</span> " . $user->count . "</li>";
         }
         ?>
       </ul>
+
+
     </div>
+
+
   </div>
 </body>
 

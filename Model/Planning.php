@@ -9,8 +9,11 @@ class Planning
     try {
       require_once('./Model/dates.php'); //Contient un tableau de dates
       $this->dates = $all_date;
-      //$this->db = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
-      $this->db = new MongoDB\Driver\Manager("mongodb://localhost:27017");
+
+      require './vendor/autoload.php';
+      //$client = new MongoDB\Driver\Manager("mongodb+srv://noe:3010@cluster0.1wmwr.mongodb.net/test");
+      $client = new MongoDB\Client("mongodb://localhost:27017");
+      $this->db = $client->Planning->users;
     } catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();
     }
@@ -20,35 +23,39 @@ class Planning
   public function getUsers()
   {
     try {
-      $read = new MongoDB\Driver\Query([], []);
-      $all_users = $this->db->executeQuery('Planning.users', $read);
+      $res = $this->db->find();
     } catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();
     }
-    return $all_users;
+    return $res;
   }
 
+  //Retourne Le nombre de taches dans l'ordre croissant : 
   public function getNbTaches($year)
   {
-    $all_users = $this->getUsers();
-
-    $nb_taches = array();
-    foreach ($all_users as $user) {
-      $taches_year = "taches" . $year;
-      $nb_taches["$user->prenom"] = count($user->$taches_year);
+    try {
+      $res = $this->db->aggregate([
+        [
+          '$project' => [
+            'prenom' => '$prenom',
+            'count' => ['$size' => '$taches' . $year]
+          ]
+        ],
+        ['$sort' => ['count' => -1]],
+      ]);
+    } catch (MongoDB\Driver\ConnectionException $e) {
+      echo $e->getMessage();
     }
-
-    asort($nb_taches);
-    return $nb_taches;
+    return $res;
   }
 
-  //Récupérer le tableau de dates
+  //Récuperer le tableau de dates
   public function getDates()
   {
     return $this->dates;
   }
 
-  //Mettre à jour la base de données
+  //Mettre à jour l'utilisateur
   public function setUsers($year)
   {
     try {
@@ -61,15 +68,10 @@ class Planning
           }
           $i++;
         }
-
-        $updates = new MongoDB\Driver\BulkWrite();
-        $updates->update(
+        $this->db->updateOne(
           ['prenom' => $user->prenom],
           ['$set' => ['taches' . $year => $user_date]],
-          ['multi' => true, 'upsert' => true]
         );
-
-        $this->db->executeBulkWrite('Planning.users', $updates);
       }
     } catch (MongoDB\Driver\ConnectionException $e) {
       echo $e->getMessage();
