@@ -1,11 +1,11 @@
 <?php
 echo "<label for='personne-select'>$date/$year</label>";
-$user_exist = 0;
+$user_exist = NULL;
 foreach ($planning->getUsers() as $user) {
   $tachesYear = 'taches' . $year;
   foreach ($user->$tachesYear as $tache) { //On vérifie si un user est déjà selectionné pour cette date
     if ($tache == $date . "/" . $year) {
-      $user_exist = $user->prenom; //S'il existe on l'enregistre dans un variable
+      $user_exist = $user->prenom; //S'il existe on l'enregistre dans une variable
     }
   }
 }
@@ -17,7 +17,7 @@ if ($user_exist) { //On l'affiche en premier dans le select
       echo "<option value='$user->prenom'>$user->prenom</option>";
     }
   }
-  echo "<option value=''>personne</option>"; //Sans oublier option 'personne' à la fin
+  echo "<option value=''>personne</option>"; //Sans oublier l'option 'personne' à la fin
 } else { //S'il n'y a pas encore d'users pour cette date
   echo "<select name='case$j' id='personne-select'>
         <option value=''>personne</option>"; //On affiche personne puis on affiche les uers dans le select

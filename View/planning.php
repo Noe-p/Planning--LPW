@@ -1,5 +1,6 @@
  <h1>Planning des corvées d'épluchage</h1>
 
+ <!-- Selection de l'année :  -->
  <form class="form_year">
    <label for="year-select">Année :</label>
    <select onchange="document.location.href='index.php?year='+this.value" name="year" id="year-select">
@@ -8,13 +9,14 @@
       echo "<option value='$year'>$year</option>";
       foreach ($years as $y) {
         if ($y != $year) {
-          echo "<option class='option' value='$y'>$y</option>";
+          echo "<option value='$y'>$y</option>";
         }
       }
       ?>
    </select>
  </form>
 
+ <!-- Repartition des taches : -->
  <?php echo "<form class='form_date' action='index.php?year=$year&setUser=1' method='POST'>"; ?>
  <table>
    <tbody>
